@@ -26,6 +26,7 @@ print("cuDF version:", cudf.__version__)
 print("pandas version:", pd.__version__)
 
 %matplotlib inline
+%config InlineBackend.figure_format ='retina'
 ```
 
 # Create DataFrame
@@ -74,12 +75,29 @@ gdf.describe()
 ```python
 # Plotting using seaborn
 ax = sns.distplot(gdf['Age'])
+
+# Some seaborn plots require us to fall back to pandas
+plt.figure(figsize=(14,4))
+ax = sns.barplot(x='Age', y='Pregnancies', data=gdf.to_pandas())
 ```
 
 ```python
 # Average, Std of columns
 print("Age avg:", gdf['Age'].mean())
 print("Age std:", gdf['Age'].std())
+```
+
+```python
+# Some DataFrame operations are not (yet) implemented and we need to fall back to pandas
+
+# Example correlation matrix
+corr = gdf.to_pandas().corr()
+
+f, ax = plt.subplots(figsize=(9, 7))
+mask = np.zeros_like(corr, dtype=np.bool)
+mask[np.triu_indices_from(mask)] = True
+cmap = sns.diverging_palette(220, 10, as_cmap=True)
+sns.heatmap(corr, mask=mask, cmap=cmap, linewidths=1, cbar_kws={"shrink": .5})
 ```
 
 ```python
@@ -123,4 +141,8 @@ gdf.apply_rows(triple_age,
                outcols=dict(Age_tripled=np.int),
                kwargs=dict()
               ).head(10)
+```
+
+```python
+
 ```
