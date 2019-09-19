@@ -111,6 +111,10 @@ gdf['Age'].nunique()
 ```
 
 ```python
+gdf.loc[2:3, ['Age', 'Glucose']]
+```
+
+```python
 # Filter data
 gdf.query('Age > 65')
 ```
@@ -126,6 +130,9 @@ gdf.groupby(['Age']).agg({'Pregnancies': 'sum'}).head()
 
 ```python
 # Apply operation to a Series
+def double_age(age):
+    return age * 2
+gdf['Age'].astype(np.float64)
 gdf['Age_doubled'] = gdf['Age'].applymap(lambda x: x*2)
 gdf.head(10)
 ```
@@ -141,6 +148,18 @@ gdf.apply_rows(triple_age,
                outcols=dict(Age_tripled=np.int),
                kwargs=dict()
               ).head(10)
+```
+
+```python
+
+```
+
+```python
+
+```
+
+```python
+
 ```
 
 ```python
