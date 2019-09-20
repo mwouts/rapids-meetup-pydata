@@ -12,6 +12,12 @@ jupyter:
     name: python3
 ---
 
+# cuDF syntax examples
+
+In this notebook, we will give some examples on how similar the cuDF syntax is to the pandas syntax.
+
+For plots and column operations, we are using the [Pima Indians Diabetes dataset](https://www.kaggle.com/uciml/pima-indians-diabetes-database/), found on Kaggle, and stored in `data/diabetes.csv`.
+
 ```python
 import numpy as np
 import matplotlib as mpl
@@ -22,6 +28,8 @@ import seaborn as sns
 
 import cudf
 import pandas as pd
+
+# Let's print the cuDF and pandas versions, newer updates might change the conclusions of this notebook
 print("cuDF version:", cudf.__version__)
 print("pandas version:", pd.__version__)
 
@@ -30,6 +38,10 @@ print("pandas version:", pd.__version__)
 ```
 
 # Create DataFrame
+
+DataFrame creation operations are pretty similar to the pandas API, you can even load data from an existing pandas DataFrame.
+
+Like pandas, with Jupyter notebooks there is a nice table-like output to visualize your DataFrame.
 
 ```python
 # Define by column
@@ -48,6 +60,7 @@ gdf
 ```
 
 ```python
+# Load a pandas dataframe in GPU
 pdf = pd.DataFrame({'a': [0, 1, 2, 3],'b': [0.1, 0.2, None, 0.3]})
 gdf = cudf.from_pandas(pdf)
 
@@ -56,20 +69,37 @@ gdf
 
 ```python
 # Read from CSV
-gdf = cudf.read_csv('diabetes.csv', delimiter=',')
+gdf = cudf.read_csv('data/diabetes.csv', delimiter=',')
 
 gdf.head(3)
 ```
 
-# Data Operation
+<!-- #region -->
+# Data Operations
+After loading the data, you want to get some information, this step is called EDA (for Exploratory Data Analysis). 
+
+Here, not all pandas functions that you usually use are (yet) implemented in cuDF. Take a look at [the official cuDF documentation]() for the exact list of existing methods. In summary, you can:
+
+-   Do some dataset operations, such as `describe`
+-   Get means, std, unique values of columns
+-   Filter rows / group by / sort values
+-   Apply user-defined functions to every row if your DataFrame
+-   Merge, concatenate DataFrames
+
+The takeaway here is that if you try something you're used to in pandas, but in cuDF, and it doesn't work, you can easily get back to the pandas API by writing:
+```
+    my_cudf_dataframe.to_pandas()
+```
+---
+<!-- #endregion -->
+
+```python
+gdf.describe()
+```
 
 ```python
 # Some functions are not implemented; we need to go back to pandas.
 gdf.to_pandas().info()
-```
-
-```python
-gdf.describe()
 ```
 
 ```python
@@ -148,20 +178,4 @@ gdf.apply_rows(triple_age,
                outcols=dict(Age_tripled=np.int),
                kwargs=dict()
               ).head(10)
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
-```
-
-```python
-
 ```
