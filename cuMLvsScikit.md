@@ -14,12 +14,12 @@ jupyter:
 
 # cuML vs Scikit
 
-In this post we will compare performance of cuMl vs scikit on following models:
-- Kmeans
-- linear regression
-- random forest
+In this post we will compare performance of cuML and scikit-learn on the following models:
+- K-means Clustering
+- Linear Regression
+- Random Forest Classification
 
-Note: These experiments are on a single Node
+Note: These experiments were done on a single Node
 
 ```python
 import numpy as np

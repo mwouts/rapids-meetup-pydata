@@ -22,12 +22,22 @@ import pandas as pd
 import cudf as gd
 ```
 
-## reading and modifying Data
+## Reading and Modifying Data
+
+We are using the Electrolysia Time-Series Electricity Consumption Dataset from Kaggle, you can find more details about it [on the Kaggle dataset page](https://www.kaggle.com/utathya/electricity-consumption).
+
+Just for kicks, we can take this opportunity to compare loading times on CPU with `pandas` and GPU with `cuDF`
+
+```python
+path = 'data/electricity_consumption.csv'
+```
+
+### On CPU
 
 ```python
 %%time
 # pandas reading time
-df = pd.read_csv('train.csv')
+df = pd.read_csv(path)
 ```
 
 ```python
@@ -45,10 +55,12 @@ df_time_series.head()
 time_original = pd.to_datetime(df.iloc[:, 0]).tolist()
 ```
 
+### On GPU
+
 ```python
-%time
+%%time
 #cudf reading
-cudf_data = gd.read_csv('train.csv')
+cudf_data = gd.read_csv(path)
 ```
 
 ```python
