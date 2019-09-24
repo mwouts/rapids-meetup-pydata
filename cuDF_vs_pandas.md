@@ -77,9 +77,7 @@ results["data_size"] = ["1e%d" % exp for exp in exps]
 results["pandas_time"] = pandas_times
 results["cudf_time"] = cudf_times
 results["speedup"] = results["pandas_time"] / results["cudf_time"]
-#results = results.set_index('data_size')
 
-#results.transpose()
 results
 ```
 
