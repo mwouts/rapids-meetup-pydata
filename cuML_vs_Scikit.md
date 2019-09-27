@@ -45,7 +45,7 @@ from cuml.cluster import KMeans as cumlKMeans
 
 ```python
 n_samples = 1000000
-n_features = 4
+n_features = 40
 ```
 
 ##### Generate Data
@@ -56,9 +56,7 @@ cudf_data_kmeans, cudf_labels_kmeans = make_blobs(
 
 cudf_data_kmeans = gd.DataFrame.from_gpu_matrix(cudf_data_kmeans)
 cudf_labels_kmeans = gd.Series(cudf_labels_kmeans)
-```
 
-```python
 scikit_data_kmeans = cudf_data_kmeans.to_pandas()
 scikit_labels_kmeans = cudf_labels_kmeans.to_pandas()
 ```
@@ -98,6 +96,56 @@ passed = (cuml_score - sk_score) < threshold
 print('compare kmeans: cuml vs sklearn labels_ are ' + ('equal' if passed else 'NOT equal'))
 ```
 
+## PCA
+
+```python
+from cuml import PCA as cumlPCA
+from sklearn.decomposition import PCA as skPCA
+import time 
+```
+
+```python
+n_samples = 1000000
+n_features = 40
+```
+
+```python
+cudf_data_kmeans, cudf_labels_kmeans = make_blobs(
+   n_samples=n_samples, n_features=n_features, centers=5, random_state=7)
+
+cudf_data_kmeans = gd.DataFrame.from_gpu_matrix(cudf_data_kmeans)
+cudf_labels_kmeans = gd.Series(cudf_labels_kmeans)
+```
+
+```python
+scikit_data_kmeans = cudf_data_kmeans.to_pandas()
+scikit_labels_kmeans = cudf_labels_kmeans.to_pandas()
+```
+
+```python
+from sklearn.preprocessing import StandardScaler
+
+scikit_data_kmeans = StandardScaler().fit_transform(scikit_data_kmeans)
+```
+
+```python
+data_ = StandardScaler().fit_transform(cudf_data_kmeans.to_pandas())
+cudf_data_kmeans = gd.from_pandas(pd.DataFrame(data_))
+```
+
+```python
+%%time
+sk_pca = skPCA(n_components=3)
+sk_pca.fit(scikit_data_kmeans)
+
+```
+
+```python
+%%time
+cuml_pca = cumlPCA(n_components=3)
+cuml_pca.fit(scikit_data_kmeans)
+```
+
 ## Linear Regression
 
 A lot of code has been copied from https://github.com/rapidsai/notebooks/blob/branch-0.10/cuml/linear_regression_demo.ipynb
@@ -114,8 +162,8 @@ from sklearn.linear_model import LinearRegression as skLR
 ```
 
 ```python
-n_samples = 2**20
-n_features = 399
+n_samples = 1000000
+n_features = 40
 ```
 
 ##### Generate Data
@@ -200,10 +248,10 @@ from sklearn.ensemble import RandomForestClassifier as sklRF
 
 ```python
 # Data parameters
-train_size = 100000
-test_size = 1000
+train_size = 1000000
+test_size = 10000
 n_samples = train_size + test_size
-n_features = 20
+n_features = 10
 
 # Random Forest building parameters
 max_depth = 12
