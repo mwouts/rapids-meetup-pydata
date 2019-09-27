@@ -84,19 +84,27 @@ results
 ```python
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
 %matplotlib inline
 %config InlineBackend.figure_format ='retina'
 
 df = cudf.melt(results, id_vars=["data_size"], var_name="class", value_name="time")
 df_time = df[df['class'] != "speedup"]
+df_t2 = df_time.copy()
 
 # We need to fall back to_pandas for plotting operations
 f, ax = plt.subplots(2, 1, figsize=(8,8))
-sns.barplot(x="data_size", y="time", hue="class", data=df_time.to_pandas(), ax=ax[0])
+sns.barplot(x="data_size", y="time", hue="class", data=df_t2.to_pandas(), ax=ax[0])
 ax[0].set_yscale('log')
 ax[0].set_ylabel('time (log)')
+
 sns.lineplot(x="data_size", y="speedup", data=results.to_pandas(), ax=ax[1], color='g')
 ax[1].yaxis.grid()
+ax[1].set_yscale('log')
+
+
+plt.savefig("cuDF_vs_pandas.eps", format="eps", transparent=True)
 ```
 
 # Takeaways
