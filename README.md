@@ -1,4 +1,7 @@
 # rapids-meetup-pydata
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mwouts/rapids-meetup-pydata/jupytext_markdown)
+
 Experiments for the 03/10/19 PyData Meetup
 
 The first tutorials present the RAPIDS GPU DataFrame package, cuDF:
