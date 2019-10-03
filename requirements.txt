@@ -1,0 +1,8 @@
+numpy
+pandas
+cudf
+
+matplotlib
+seaborn
+
+jupytext
